@@ -3,12 +3,11 @@ import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
-public class RekenMachine extends RekenmachineServiceImpl {
+public class RekenMachine {
     static Font font = new Font("Courier", Font.PLAIN, 9);
 
 
     public static void main(String[] args) {
-
 
         JFrame frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,6 +21,7 @@ public class RekenMachine extends RekenmachineServiceImpl {
         rekenmachine.displayField = new JTextArea();
         rekenmachine.displayField.setBounds(10, 20, width-40, 180);
         container.add(rekenmachine.displayField);
+        rekenmachine.showInput("0");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(4, 3));

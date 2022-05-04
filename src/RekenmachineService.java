@@ -1,5 +1,4 @@
 public interface RekenmachineService {
-    double output = 0;
-    String resolve(String current, String after, String operation);
+    String solveAll(StringBuilder input);
     void showInput(String button);
 }

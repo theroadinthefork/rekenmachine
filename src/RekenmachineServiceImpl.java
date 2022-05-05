@@ -74,22 +74,28 @@ public class RekenmachineServiceImpl implements RekenmachineService {
                     indexesOfMultiplicationDivision.add(operations.indexOf(operation));
                 }
             }
+
             // let list start with either multiplication or division that comes first, i.e. smallest index first
             Collections.sort(indexesOfMultiplicationDivision);
 
             // if there are multiplications or divisions, solve the first one in the list
             if (indexesOfMultiplicationDivision.size() > 0) {
-                solve(numbers, operations, indexesOfMultiplicationDivision.get(0));
-                continue; // start with next iteration, so that all multiplications/divisions are done first
+                basicOperation(numbers, operations, indexesOfMultiplicationDivision.get(0));
+                continue; // start next iteration, so that all multiplications/divisions are done first
             }
 
             // do additions/subtractions
-            solve(numbers, operations, 0);
+            try {
+                basicOperation(numbers, operations, 0);
+            } catch (IndexOutOfBoundsException e ){
+                return "error";
+            }
         }
         return numbers.get(0);
     }
 
-    private void solve(List<String> numbers, List<String> operations, int operatorIndex) {
+    private void basicOperation(List<String> numbers, List<String> operations, int operatorIndex) {
+
         String numbBeforeOperator = numbers.get(operatorIndex);
         String numbAfterOperator = numbers.get(operatorIndex+1);
 
@@ -101,9 +107,23 @@ public class RekenmachineServiceImpl implements RekenmachineService {
             default -> null;
         };
 
-        String result = String.valueOf(
-                output.apply(Double.parseDouble(numbBeforeOperator), Double.parseDouble(numbAfterOperator))
-        );
+        String result = "";
+        try {
+            result = String.valueOf(output.apply(Double.parseDouble(numbBeforeOperator), Double.parseDouble(numbAfterOperator)));
+        } catch (NumberFormatException e) {
+            operations.clear();
+            input.setLength(0);
+            result = "error";
+            return;
+        }
+
+        if (result.equals("-Infinity")) {
+            operations.clear();
+            numbers.clear();
+            input.setLength(0);
+            numbers.add("error");
+            return;
+        }
 
         numbers.set(operatorIndex, result); // replace number before operator with result
         numbers.remove(operatorIndex +1); // remove number after operator

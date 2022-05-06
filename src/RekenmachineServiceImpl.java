@@ -117,6 +117,7 @@ public class RekenmachineServiceImpl implements RekenmachineService {
             return;
         }
 
+        // Result becomes "-Infinity" if you divide negative number by zero somehow
         if (result.equals("-Infinity")) {
             operations.clear();
             numbers.clear();
